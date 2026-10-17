@@ -8,6 +8,11 @@ on:
 permissions:
   contents: write
 
+env:
+  # Workaround for JDK-8275771: GraalVM 17.0.3 native-image crashes on cgroup v2
+  # runners with "CgroupInfo.getMountPoint() ... anyController is null"
+  JAVA_TOOL_OPTIONS: -XX:-UseContainerSupport
+
 jobs:
   apk:
     runs-on: ubuntu-24.04
