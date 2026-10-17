@@ -87,7 +87,9 @@
                     <appIdentifier>com.snake3d.app</appIdentifier>
                     <target>${gluonfx.target}</target>
                     <resourcesList>
-                        <list>.*\.(png|wav|mp4|ico)$</list>
+                        <!-- [.] instead of \. : the plugin embeds this into resourceconfig JSON unescaped,
+                             and "\." is an invalid JSON escape (broke CI: "Invalid escape character"). -->
+                        <list>.*[.](png|wav|mp4|ico)$</list>
                     </resourcesList>
                 </configuration>
             </plugin>
