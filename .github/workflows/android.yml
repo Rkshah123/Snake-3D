@@ -1,0 +1,52 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up GraalVM CE 17 (native-image included)
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '17'
+          distribution: 'graalvm-ce'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Prepare Android SDK (platform, build-tools, NDK 25)
+        run: |
+          yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" \
+            "platform-tools" "platforms;android-33" "build-tools;33.0.2" "ndk;25.2.9519653"
+
+      - name: Build APK (GluonFX native image)
+        run: mvn -B -Pandroid gluonfx:build gluonfx:package
+
+      - name: Stage APK
+        run: |
+          mkdir -p release
+          find target/gluonfx -name '*.apk' -exec cp {} release/ \;
+          ls -la release
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Snake3D-APK
+          path: release/*.apk
+          if-no-files-found: error
+
+      - name: Publish APK to GitHub Release (tag: apk)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release view apk >/dev/null 2>&1 || gh release create apk --title "Snake3D APK" --notes "Automated Snake3D Android APK build"
+          gh release upload apk release/*.apk --clobber
