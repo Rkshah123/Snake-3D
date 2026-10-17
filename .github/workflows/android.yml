@@ -21,10 +21,12 @@ jobs:
           wget -q https://github.com/gluonhq/graal/releases/download/gluon-22.1.0.1-Final/graalvm-svm-java17-linux-gluon-22.1.0.1-Final.tar.gz -O gluon-graalvm.tar.gz
           tar -xzf gluon-graalvm.tar.gz
           rm gluon-graalvm.tar.gz
-          NI=$(find "$RUNNER_TEMP" -type f -name native-image | head -n1)
+          NI=$(find "$RUNNER_TEMP" -maxdepth 3 -type f -name native-image -not -path '*/lib/svm/*' | head -n1)
           if [ -z "$NI" ]; then echo "native-image not found in tarball"; exit 1; fi
           GRAAL_DIR=$(cd "$(dirname "$NI")/.." && pwd)
           echo "Graal dir: $GRAAL_DIR"
+          "$GRAAL_DIR/bin/java" -version 2>&1
+          test -x "$GRAAL_DIR/bin/javac" || { echo "javac missing - wrong root"; exit 1; }
           echo "GRAALVM_HOME=$GRAAL_DIR" >> "$GITHUB_ENV"
           echo "JAVA_HOME=$GRAAL_DIR" >> "$GITHUB_ENV"
           echo "$GRAAL_DIR/bin" >> "$GITHUB_PATH"
