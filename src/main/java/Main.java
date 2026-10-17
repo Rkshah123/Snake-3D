@@ -731,12 +731,17 @@ public class Main extends Application {
         Scene scene = new Scene(layeredRoot, windowWidth, windowHeight, false);
         this.sceneRef = scene;
         running = false;
+        System.out.println("S3D: start() - booting engine");
         Engine.boot(this, stage);
+        System.out.println("S3D: boot done");
         Engine.attachHud(this);
+        System.out.println("S3D: hud built");
         if (!Engine.profile().skipIntro) {
             layeredRoot.getChildren().add(Engine.buildIntro());
+            System.out.println("S3D: intro built");
         } else {
             Engine.showMenu();
+            System.out.println("S3D: menu built");
         }
         scene.widthProperty().addListener((obs, oldVal, newVal) -> {
             windowWidth = newVal.doubleValue();

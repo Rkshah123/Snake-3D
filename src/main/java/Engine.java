@@ -430,7 +430,12 @@ final class Engine {
         booted = true;
         mt = ref;
         stageRef = stage;
+        System.out.println("S3D: boot begin");
         loadProfile();
+        if (isAndroid()) {
+            profile.skipIntro = true;   // intro SubScene is not safe on the graal-android renderer
+            System.out.println("S3D: android detected - intro skipped");
+        }
         try { sClick = new AudioClip(mt.getClass().getResource("/s1.wav").toExternalForm()); } catch (Throwable ignore) { sClick = null; }
         try { sStart = new AudioClip(mt.getClass().getResource("/gamestart.wav").toExternalForm()); } catch (Throwable ignore) { sStart = null; }
         try { sEat = new AudioClip(mt.getClass().getResource("/eat.wav").toExternalForm()); } catch (Throwable ignore) { sEat = null; }
@@ -439,6 +444,19 @@ final class Engine {
             saveLastSkinCompat();
         } catch (Throwable ignore) {}
         try { if (profile.fullscreen && stageRef != null) stageRef.setFullScreen(true); } catch (Throwable ignore) {}
+        System.out.println("S3D: boot complete");
+    }
+
+    /** Detects the gluon graal-android executive (its javafx.platform property is set by the substrate runtime). */
+    static boolean isAndroid() {
+        try {
+            String p = System.getProperty("javafx.platform", "");
+            if (p.contains("android")) return true;
+            String u = System.getProperty("java.vm.name", "").toLowerCase();
+            return u.contains("substrate") || u.contains("graalvm") && System.getProperty("os.name", "").toLowerCase().contains("linux");
+        } catch (Throwable t) {
+            return false;
+        }
     }
 
     /** Sync Main's legacy skin preference with profile skin id. */
@@ -714,21 +732,25 @@ final class Engine {
         }
         overlay.getChildren().add(stars);
 
-        // ---- live 3D hero snake in a SubScene ----
+        // ---- live 3D hero snake in a SubScene (desktop only) ----
         Group hero = new Group();
+        boolean ok3d = false;
+        boolean show3d = !isAndroid();
         PerspectiveCamera cam = new PerspectiveCamera(true);
         cam.setTranslateZ(-340);
         try {
             cam.getTransforms().add(new javafx.scene.transform.Rotate(-7, javafx.scene.transform.Rotate.X_AXIS));
         } catch (Throwable ignore) {}
-        boolean ok3d = true;
         SubScene heroScene = null;
-        try {
-            heroScene = new SubScene(hero, 900, 430, true, SceneAntialiasing.BALANCED);
-            heroScene.setFill(Color.TRANSPARENT);
-            heroScene.setCamera(cam);
-        } catch (Throwable t) {
-            ok3d = false;
+        if (show3d) {
+            try {
+                heroScene = new SubScene(hero, 900, 430, true, SceneAntialiasing.BALANCED);
+                heroScene.setFill(Color.TRANSPARENT);
+                heroScene.setCamera(cam);
+                ok3d = true;
+            } catch (Throwable t) {
+                ok3d = false;
+            }
         }
         final SubScene hs = heroScene;
         if (ok3d) {
@@ -892,20 +914,22 @@ final class Engine {
         Pane dark = new Pane();
         dark.setOpacity(0.34);
         boolean videoOk = false;
-        try {
-            MediaPlayer mp = new MediaPlayer(new Media(mt.getClass().getResource("/bgvideo.mp4").toExternalForm()));
-            mp.setCycleCount(MediaPlayer.INDEFINITE);
-            mp.setVolume(profile.musicVol * 0.5);
-            mp.setAutoPlay(true);
-            introMedia.add(mp);
-            menuVideo = mp;
-            MediaView mv = new MediaView(mp);
-            mv.setPreserveRatio(false);
-            mv.fitWidthProperty().bind(overlay.widthProperty());
-            mv.fitHeightProperty().bind(overlay.heightProperty());
-            overlay.getChildren().add(mv);
-            videoOk = true;
-        } catch (Throwable ignore) {}
+        if (!isAndroid()) {
+            try {
+                MediaPlayer mp = new MediaPlayer(new Media(mt.getClass().getResource("/bgvideo.mp4").toExternalForm()));
+                mp.setCycleCount(MediaPlayer.INDEFINITE);
+                mp.setVolume(profile.musicVol * 0.5);
+                mp.setAutoPlay(true);
+                introMedia.add(mp);
+                menuVideo = mp;
+                MediaView mv = new MediaView(mp);
+                mv.setPreserveRatio(false);
+                mv.fitWidthProperty().bind(overlay.widthProperty());
+                mv.fitHeightProperty().bind(overlay.heightProperty());
+                overlay.getChildren().add(mv);
+                videoOk = true;
+            } catch (Throwable ignore) {}
+        }
         if (!videoOk) {
             dark.setOpacity(1);
             dark.setBackground(new Background(new BackgroundFill(
