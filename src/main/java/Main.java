@@ -35,139 +35,139 @@ import javafx.util.Duration;
 import java.util.*;
 
 public class Main extends Application {
-    private double headX = 400;
-    private double headY = 300;
-    private double speed = 3;
-    private int direction = 0; // 0=right, 1=down, 2=left, 3=up
-    private double windowWidth = 800;
-    private double windowHeight = 700;
-    private final double HEAD_RADIUS = 18;
-    private final double BODY_RADIUS = 17;
-    private final double SEGMENT_SPACING = 16;
-    private final double BOTTOM_OFFSET = 50;
-    private final double LINE_MARGIN = 0;
-    private Sphere head;
-    private List<Sphere> bodyParts = new ArrayList<>();
-    private List<Sphere> fruits = new ArrayList<>();
-    private Random random = new Random();
-    private int score = 0;
-    private List<Sphere> specialItems = new ArrayList<>();
-    private boolean specialItemVisible = false;
-    private PauseTransition specialDespawnTimer;
-    private Sphere lastSpecialItem = null;
-    private Deque<double[]> positionHistory = new ArrayDeque<>();
-    private Text scoreText;
-    private Line topLine;
-    private Line bottomLine;
-    private long startTime;
-    private boolean running = true;
-    private Group gameElements;
-    private AnimationTimer timer;
-    private double villainX = 200;
-    private double villainY = 200;
-    private int villainDirection = 0;
-    private List<Sphere> villainBodyParts = new ArrayList<>();
-    private Deque<double[]> villainHistory = new ArrayDeque<>();
-    private Sphere villainHead;
-    private boolean villainAlive = true;
-    private int framesSinceVillainTurn = 0;
-    private static final int VILLAIN_TURN_COOLDOWN_FRAMES = 5;
-    private PauseTransition villainRespawnTimer;
-    private double villain2X = 400;
-    private double villain2Y = 400;
-    private int villain2Direction = 2;
-    private List<Sphere> villain2BodyParts = new ArrayList<>();
-    private Deque<double[]> villain2History = new ArrayDeque<>();
-    private Sphere villain2Head;
-    private boolean villain2Alive = true;
-    private int framesSinceVillain2Turn = 0;
-    private static final int VILLAIN2_TURN_COOLDOWN_FRAMES = 5;
-    private PauseTransition villain2RespawnTimer;
-    private double villain3X = 500;
-    private double villain3Y = 500;
-    private int villain3Direction = 3;
-    private List<Sphere> villain3BodyParts = new ArrayList<>();
-    private Deque<double[]> villain3History = new ArrayDeque<>();
-    private Sphere villain3Head;
-    private boolean villain3Alive = true;
-    private int framesSinceVillain3Turn = 0;
-    private static final int VILLAIN3_TURN_COOLDOWN_FRAMES = 5;
-    private PauseTransition villain3RespawnTimer;
-    private AudioClip eatSound;
-    private MediaPlayer gameOverSound;
-    private double villainSpeed = 3;
-    private double villain2Speed = 3;
-    private double villain3Speed = 3;
-    private final double BASE_SPEED = 3;
-    private final double SPEED_INCREMENT = 1;
-    private int playerFruitCount = 0;
-    private int villainFruitCount = 0;
-    private int villain2FruitCount = 0;
-    private int villain3FruitCount = 0;
-    private Sphere goldenFruit;
-    private boolean goldenFruitVisible = false;
-    private final double GOLDEN_FRUIT_RADIUS = HEAD_RADIUS * 1.3;
-    private final double GOLDEN_FRUIT_SPEED = 5.0;
-    private final int GOLDEN_FRUIT_SHOW_DURATION = 5;
-    private final int GOLDEN_FRUIT_APPEAR_INTERVAL = 10;
-    private PauseTransition goldenFruitDisappearTimer;
-    private PauseTransition goldenFruitRespawnTimer;
-    private javafx.animation.ScaleTransition goldenPulse;
-    private double previousPlayerSpeed = BASE_SPEED;
-    private double previousVillainSpeed = BASE_SPEED;
-    private double previousVillain2Speed = BASE_SPEED;
-    private double previousVillain3Speed = BASE_SPEED;
-    private PauseTransition playerGoldenBoostTimer;
-    private PauseTransition villainGoldenBoostTimer;
-    private PauseTransition villain2GoldenBoostTimer;
-    private PauseTransition villain3GoldenBoostTimer;
-    private enum SkinType { CLASSIC, NEON, RAINBOW, OCEAN, LIME, COSMIC }
-    private static final String PREFS_NODE = "SnakeGame";
-    private static final String PREF_LAST_SKIN = "lastSkin";
-    private SkinType currentSkin = SkinType.CLASSIC;
-    private final double RAINBOW_HUE_SPEED = 60;
+    double headX = 400;
+    double headY = 300;
+    double speed = 3;
+    int direction = 0; // 0=right, 1=down, 2=left, 3=up
+    double windowWidth = 800;
+    double windowHeight = 700;
+    static final double HEAD_RADIUS = 18;
+    static final double BODY_RADIUS = 17;
+    static final double SEGMENT_SPACING = 16;
+    static final double BOTTOM_OFFSET = 50;
+    static final double LINE_MARGIN = 0;
+    Sphere head;
+    List<Sphere> bodyParts = new ArrayList<>();
+    List<Sphere> fruits = new ArrayList<>();
+    Random random = new Random();
+    int score = 0;
+    List<Sphere> specialItems = new ArrayList<>();
+    boolean specialItemVisible = false;
+    PauseTransition specialDespawnTimer;
+    Sphere lastSpecialItem = null;
+    Deque<double[]> positionHistory = new ArrayDeque<>();
+    Text scoreText;
+    Line topLine;
+    Line bottomLine;
+    long startTime;
+    boolean running = true;
+    Group gameElements;
+    AnimationTimer timer;
+    double villainX = 200;
+    double villainY = 200;
+    int villainDirection = 0;
+    List<Sphere> villainBodyParts = new ArrayList<>();
+    Deque<double[]> villainHistory = new ArrayDeque<>();
+    Sphere villainHead;
+    boolean villainAlive = true;
+    int framesSinceVillainTurn = 0;
+    static final int VILLAIN_TURN_COOLDOWN_FRAMES = 5;
+    PauseTransition villainRespawnTimer;
+    double villain2X = 400;
+    double villain2Y = 400;
+    int villain2Direction = 2;
+    List<Sphere> villain2BodyParts = new ArrayList<>();
+    Deque<double[]> villain2History = new ArrayDeque<>();
+    Sphere villain2Head;
+    boolean villain2Alive = true;
+    int framesSinceVillain2Turn = 0;
+    static final int VILLAIN2_TURN_COOLDOWN_FRAMES = 5;
+    PauseTransition villain2RespawnTimer;
+    double villain3X = 500;
+    double villain3Y = 500;
+    int villain3Direction = 3;
+    List<Sphere> villain3BodyParts = new ArrayList<>();
+    Deque<double[]> villain3History = new ArrayDeque<>();
+    Sphere villain3Head;
+    boolean villain3Alive = true;
+    int framesSinceVillain3Turn = 0;
+    static final int VILLAIN3_TURN_COOLDOWN_FRAMES = 5;
+    PauseTransition villain3RespawnTimer;
+    AudioClip eatSound;
+    MediaPlayer gameOverSound;
+    double villainSpeed = 3;
+    double villain2Speed = 3;
+    double villain3Speed = 3;
+    final double BASE_SPEED = 3;
+    final double SPEED_INCREMENT = 1;
+    int playerFruitCount = 0;
+    int villainFruitCount = 0;
+    int villain2FruitCount = 0;
+    int villain3FruitCount = 0;
+    Sphere goldenFruit;
+    boolean goldenFruitVisible = false;
+    final double GOLDEN_FRUIT_RADIUS = HEAD_RADIUS * 1.3;
+    final double GOLDEN_FRUIT_SPEED = 5.0;
+    final int GOLDEN_FRUIT_SHOW_DURATION = 5;
+    final int GOLDEN_FRUIT_APPEAR_INTERVAL = 10;
+    PauseTransition goldenFruitDisappearTimer;
+    PauseTransition goldenFruitRespawnTimer;
+    javafx.animation.ScaleTransition goldenPulse;
+    double previousPlayerSpeed = BASE_SPEED;
+    double previousVillainSpeed = BASE_SPEED;
+    double previousVillain2Speed = BASE_SPEED;
+    double previousVillain3Speed = BASE_SPEED;
+    PauseTransition playerGoldenBoostTimer;
+    PauseTransition villainGoldenBoostTimer;
+    PauseTransition villain2GoldenBoostTimer;
+    PauseTransition villain3GoldenBoostTimer;
+    enum SkinType { CLASSIC, NEON, RAINBOW, OCEAN, LIME, COSMIC }
+    static final String PREFS_NODE = "SnakeGame";
+    static final String PREF_LAST_SKIN = "lastSkin";
+    SkinType currentSkin = SkinType.CLASSIC;
+    final double RAINBOW_HUE_SPEED = 60;
     // Reusable materials for animated skins (avoids allocating a new PhongMaterial every frame)
-    private final List<PhongMaterial> rainbowMats = new ArrayList<>();
-    private final List<PhongMaterial> cosmicMats = new ArrayList<>();
-    private final List<Color> COSMIC_PALETTE = List.of(
+    final List<PhongMaterial> rainbowMats = new ArrayList<>();
+    final List<PhongMaterial> cosmicMats = new ArrayList<>();
+    final List<Color> COSMIC_PALETTE = List.of(
             Color.DARKVIOLET, Color.ROYALBLUE, Color.MEDIUMVIOLETRED, Color.WHITE
     );
-    private final List<Color> NEON_PALETTE = List.of(
+    final List<Color> NEON_PALETTE = List.of(
             Color.BLACK, Color.BROWN, Color.DARKBLUE, Color.DARKRED
     );
-    private final List<Color> RAINBOW_PALETTE = List.of(
+    final List<Color> RAINBOW_PALETTE = List.of(
             Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, Color.INDIGO, Color.VIOLET
     );
-    private final List<Color> OCEAN_PALETTE = List.of(
+    final List<Color> OCEAN_PALETTE = List.of(
             Color.DEEPSKYBLUE, Color.ROYALBLUE, Color.DARKSLATEBLUE,
             Color.LIGHTSKYBLUE, Color.MEDIUMBLUE, Color.CORNFLOWERBLUE
     );
-    private final List<Color> VILLAIN_PALETTE = List.of(
+    final List<Color> VILLAIN_PALETTE = List.of(
             Color.DARKGREY, Color.GREY, Color.BLACK, Color.MAROON
     );
-    private final List<Color> VILLAIN2_PALETTE = List.of(
+    final List<Color> VILLAIN2_PALETTE = List.of(
             Color.RED, Color.CORAL, Color.FIREBRICK, Color.DEEPSKYBLUE
     );
-    private final List<Color> VILLAIN3_PALETTE = List.of(
+    final List<Color> VILLAIN3_PALETTE = List.of(
             Color.PERU, Color.BURLYWOOD, Color.CHOCOLATE, Color.CORNFLOWERBLUE
     );
-    private final PhongMaterial classicMat = new PhongMaterial(Color.web("#2ECC71")); // fill
-    private final PhongMaterial classicHeadMat = new PhongMaterial(Color.web("#2ECC71"));
-    private final PhongMaterial neonMat = new PhongMaterial(Color.web("#111111"));
-    private final PhongMaterial neonHeadMat = new PhongMaterial(Color.web("#111111"));
-    private final javafx.scene.effect.Glow neonGlow = new javafx.scene.effect.Glow(0.9);
-    private final PhongMaterial oceanMat       = new PhongMaterial(Color.LIGHTBLUE);
-    private final PhongMaterial oceanHeadMat   = new PhongMaterial(Color.ROYALBLUE);
-    private final PhongMaterial limeMat        = new PhongMaterial(Color.YELLOWGREEN);
-    private final PhongMaterial limeHeadMat    = new PhongMaterial(Color.LIMEGREEN);
-    private Button homeButton;
-    private int highScore = 0;
-    private Scene sceneRef;
-    private Group headGroup;
-    private AudioClip clickSound;
-    private Button stopStartButton;
+    final PhongMaterial classicMat = new PhongMaterial(Color.web("#2ECC71")); // fill
+    final PhongMaterial classicHeadMat = new PhongMaterial(Color.web("#2ECC71"));
+    final PhongMaterial neonMat = new PhongMaterial(Color.web("#111111"));
+    final PhongMaterial neonHeadMat = new PhongMaterial(Color.web("#111111"));
+    final javafx.scene.effect.Glow neonGlow = new javafx.scene.effect.Glow(0.9);
+    final PhongMaterial oceanMat       = new PhongMaterial(Color.LIGHTBLUE);
+    final PhongMaterial oceanHeadMat   = new PhongMaterial(Color.ROYALBLUE);
+    final PhongMaterial limeMat        = new PhongMaterial(Color.YELLOWGREEN);
+    final PhongMaterial limeHeadMat    = new PhongMaterial(Color.LIMEGREEN);
+    Button homeButton;
+    int highScore = 0;
+    Scene sceneRef;
+    Group headGroup;
+    AudioClip clickSound;
+    Button stopStartButton;
     //=======================================================  spawnSpecialItem  =======================================
-    private void spawnSpecialItem(Group gameElements) {
+    void spawnSpecialItem(Group gameElements) {
         if (specialItemVisible) return;
         List<Sphere> candidates = new ArrayList<>(specialItems);
         candidates.remove(lastSpecialItem);
@@ -190,7 +190,7 @@ public class Main extends Application {
         specialDespawnTimer.playFromStart();
     }
     //=======================================================  spawnSparks  ============================================
-    private void spawnSparks(Button btn) {
+    void spawnSparks(Button btn) {
         Random rand = new Random();
         int sparkCount = 12;
         for (int i = 0; i < sparkCount; i++) {
@@ -218,7 +218,7 @@ public class Main extends Application {
     }
 
     // ============================================   buildSkinSelectorOverlay   =======================================
-    private Pane buildSkinSelectorOverlay(Runnable onStart) {
+    Pane buildSkinSelectorOverlay(Runnable onStart) {
         loadLastSkin();
         var overlay = new StackPane();
         overlay.setPickOnBounds(true);
@@ -731,11 +731,13 @@ public class Main extends Application {
         Scene scene = new Scene(layeredRoot, windowWidth, windowHeight, false);
         this.sceneRef = scene;
         running = false;
-        Pane overlay = buildSkinSelectorOverlay(() -> {
-            applySkinToPlayerSnake();
-            running = true;
-        });
-        layeredRoot.getChildren().add(overlay);
+        Engine.boot(this, stage);
+        Engine.attachHud(this);
+        if (!Engine.profile().skipIntro) {
+            layeredRoot.getChildren().add(Engine.buildIntro());
+        } else {
+            Engine.showMenu();
+        }
         scene.widthProperty().addListener((obs, oldVal, newVal) -> {
             windowWidth = newVal.doubleValue();
             topLine.setEndX(windowWidth);
@@ -785,6 +787,7 @@ public class Main extends Application {
                 case A, LEFT -> direction = 2;  // Left
                 case D, RIGHT -> direction = 0; // Right
             }
+            Engine.onKey(e.getCode());
         });
         respawnRandomFruit(gameElements);
         setupGoldenFruit(gameElements);
@@ -794,11 +797,9 @@ public class Main extends Application {
             private boolean waitingToRespawn = false;
             @Override
             public void handle(long now) {
-                Stop[] stops = new Stop[] { new Stop(0, Color.BLACK), new Stop(1, Color.DARKBLUE) };
-                LinearGradient lg = new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, stops);
-                gc.setFill(lg);
+                Engine.paintBackground(gc, Main.this);
                 gc.fillRect(0, 0, windowWidth, windowHeight);
-                gc.setFill(Color.WHITE);
+                gc.setFill(Engine.starColor());
                 for (int i = 0; i < numStars; i++) {
                     double size = 1 + Math.random() * 2; // twinkle
                     gc.fillOval(x[i], y[i], size, size);
@@ -941,7 +942,7 @@ public class Main extends Application {
                     double dy = headY - fruit.getTranslateY();
                     double distance = Math.sqrt(dx * dx + dy * dy);
                     if (distance < HEAD_RADIUS + HEAD_RADIUS * 0.9) {
-                        score++;
+                        score += Engine.addFruitScore(Main.this);
                         scoreText.setText("Score: " + score);
                         playerFruitCount++;
                         if (playerFruitCount % 10 == 0) {
@@ -1125,6 +1126,7 @@ public class Main extends Application {
                     if (distance < HEAD_RADIUS + GOLDEN_FRUIT_RADIUS) {
                         previousPlayerSpeed = speed;
                         speed = Math.max(GOLDEN_FRUIT_SPEED, previousPlayerSpeed + 2.0);
+                        Engine.onGoldenEaten(Main.this);
                         if (playerGoldenBoostTimer != null) playerGoldenBoostTimer.stop();
                         playerGoldenBoostTimer = new PauseTransition(Duration.seconds(10));
                         playerGoldenBoostTimer.setOnFinished(e -> speed = previousPlayerSpeed);
@@ -1190,7 +1192,7 @@ public class Main extends Application {
                     }
                 }
                 // ===============================
-                // COLLISION DETECTION (Player ↔ Villain1)
+                // COLLISION DETECTION (Player â†” Villain1)
                 // ===============================
                 java.util.function.BiFunction<double[], double[], Double> dist = (a, b) -> {
                     double dx = a[0] - b[0];
@@ -1221,7 +1223,7 @@ public class Main extends Application {
                     }
                 }
                 // ===============================
-                // COLLISION DETECTION (Player ↔ Villain2)
+                // COLLISION DETECTION (Player â†” Villain2)
                 // ===============================
                 java.util.function.BiFunction<double[], double[], Double> dist1 = (c, d) -> {
                     double dx = c[0] - d[0];
@@ -1252,7 +1254,7 @@ public class Main extends Application {
                     }
                 }
                 // ===============================
-                // COLLISION DETECTION (Player ↔ Villain3)
+                // COLLISION DETECTION (Player â†” Villain3)
                 // ===============================
                 java.util.function.BiFunction<double[], double[], Double> dist3 = (e, f) -> {
                     double dx = e[0] - f[0];
@@ -1285,6 +1287,8 @@ public class Main extends Application {
                 handleVillainCollision(gameElements, 1, 2);
                 handleVillainCollision(gameElements, 1, 3);
                 handleVillainCollision(gameElements, 2, 3);
+                Engine.tickGame(Main.this);
+                Engine.tickPost(Main.this, stage);
             }
         };
         timer.start();
@@ -1309,7 +1313,7 @@ public class Main extends Application {
             stage.close();
         });
         stage.setScene(scene);
-        stage.setTitle("3D Snake Game");
+        stage.setTitle("Snake 3D");
         try {
             stage.getIcons().add(new Image("/icon.png"));
         } catch (Exception ignored) {}
@@ -1320,7 +1324,7 @@ public class Main extends Application {
         updateButtonPositions.run();
     }
     //==================================================================   shrinkSnake   ===============================
-    private void shrinkSnake(List<Sphere> bodyParts, Group gameElements) {
+    void shrinkSnake(List<Sphere> bodyParts, Group gameElements) {
         if (bodyParts.size() > 1) {
             Sphere lastSegment = bodyParts.remove(bodyParts.size() - 1);
             javafx.animation.ScaleTransition scale = new javafx.animation.ScaleTransition(Duration.seconds(0.4), lastSegment);
@@ -1335,7 +1339,7 @@ public class Main extends Application {
         }
     }
     //===========================================================   loadLastSkin   =====================================
-    private void loadLastSkin() {
+    void loadLastSkin() {
         try {
             var prefs = java.util.prefs.Preferences.userRoot().node(PREFS_NODE);
             String s = prefs.get(PREF_LAST_SKIN, "CLASSIC");
@@ -1345,14 +1349,14 @@ public class Main extends Application {
         }
     }
     //===============================================================   saveLastSkin   =================================
-    private void saveLastSkin() {
+    void saveLastSkin() {
         try {
             var prefs = java.util.prefs.Preferences.userRoot().node(PREFS_NODE);
             prefs.put(PREF_LAST_SKIN, currentSkin.name());
         } catch (Throwable ignore) {}
     }
     //============================================================   applySkinToPlayerSnake   ==========================
-    private void applySkinToPlayerSnake() {
+    void applySkinToPlayerSnake() {
         switch (currentSkin) {
             case CLASSIC -> {
                 head.setMaterial(classicHeadMat);
@@ -1388,11 +1392,11 @@ public class Main extends Application {
         }
     }
     //======================================================================   generateCosmicColor   ========================
-    private Color generateCosmicColor() {
+    Color generateCosmicColor() {
         return COSMIC_PALETTE.get(random.nextInt(COSMIC_PALETTE.size()));
     }
     //================================================================   spawnTrailParticles   =========================
-    private void spawnTrailParticles(Group gameElements, List<Color> palette, int count, double spread) {
+    void spawnTrailParticles(Group gameElements, List<Color> palette, int count, double spread) {
         for (int i = 0; i < count; i++) {
             Sphere seg = bodyParts.get(random.nextInt(bodyParts.size()));
             Color color = palette.get(random.nextInt(palette.size()));
@@ -1408,7 +1412,7 @@ public class Main extends Application {
         }
     }
     //==============================================================   spawnVillain1Trail   ============================
-    private void spawnVillainTrail(Group gameElements) {
+    void spawnVillainTrail(Group gameElements) {
         if (!villainAlive || villainBodyParts.isEmpty()) return;
         int particleCount = 3 + random.nextInt(2);
         for (int i = 0; i < particleCount; i++) {
@@ -1425,7 +1429,7 @@ public class Main extends Application {
         }
     }
     //==============================================================   spawnVillain2Trail   ============================
-    private void spawnVillain2Trail(Group gameElements) {
+    void spawnVillain2Trail(Group gameElements) {
         if (!villain2Alive || villain2BodyParts.isEmpty()) return;
         int particleCount = 3 + random.nextInt(2);
         for (int i = 0; i < particleCount; i++) {
@@ -1442,7 +1446,7 @@ public class Main extends Application {
         }
     }
     //==============================================================   spawnVillainTrail   =============================
-    private void spawnVillain3Trail(Group gameElements) {
+    void spawnVillain3Trail(Group gameElements) {
         if (!villain3Alive || villain3BodyParts.isEmpty()) return;
         int particleCount = 3 + random.nextInt(2);
         for (int i = 0; i < particleCount; i++) {
@@ -1459,7 +1463,7 @@ public class Main extends Application {
         }
     }
     //=====================================================================   spawnVillain1HeadGlow   ==================
-    private void spawnVillainHeadGlow(Group gameElements, Color glowColor) {
+    void spawnVillainHeadGlow(Group gameElements, Color glowColor) {
         if (!villainAlive) return;
         Circle glow = new Circle(6, glowColor);
         glow.setTranslateX(villainHead.getTranslateX());
@@ -1472,7 +1476,7 @@ public class Main extends Application {
         fade.play();
     }
     //=====================================================================   spawnVillain2HeadGlow   ==================
-    private void spawnVillain2HeadGlow(Group gameElements, Color glowColor) {
+    void spawnVillain2HeadGlow(Group gameElements, Color glowColor) {
         if (!villain2Alive) return;
         Circle glow = new Circle(6, glowColor);
         glow.setTranslateX(villain2Head.getTranslateX());
@@ -1485,7 +1489,7 @@ public class Main extends Application {
         fade.play();
     }
     //=====================================================================   spawnVillain3HeadGlow   ==================
-    private void spawnVillain3HeadGlow(Group gameElements, Color glowColor) {
+    void spawnVillain3HeadGlow(Group gameElements, Color glowColor) {
         if (!villain3Alive) return;
         Circle glow = new Circle(6, glowColor);
         glow.setTranslateX(villain3Head.getTranslateX());
@@ -1498,7 +1502,7 @@ public class Main extends Application {
         fade.play();
     }
     //=====================================================================   spawnHeadGlow   ==========================
-    private void spawnHeadGlow(Group gameElements, Color glowColor) {
+    void spawnHeadGlow(Group gameElements, Color glowColor) {
         Circle star = new Circle(6, glowColor);
         star.setTranslateX(headGroup.getTranslateX());
         star.setTranslateY(headGroup.getTranslateY());
@@ -1510,7 +1514,7 @@ public class Main extends Application {
         fade.play();
     }
     //=========================================================================   spawnRainbowHeadGlow   ===============
-    private void spawnRainbowHeadGlow(Group gameElements, double elapsedSeconds) {
+    void spawnRainbowHeadGlow(Group gameElements, double elapsedSeconds) {
         for (int i = 0; i < RAINBOW_PALETTE.size(); i++) {
             Color color = RAINBOW_PALETTE.get(i);
             double angle = (elapsedSeconds * 120 + i * (360.0 / RAINBOW_PALETTE.size())) % 360;
@@ -1529,7 +1533,7 @@ public class Main extends Application {
         }
     }
     //==============================================================   updateRainbowColors   ======================
-    private void updateRainbowColors(double elapsedSeconds) {
+    void updateRainbowColors(double elapsedSeconds) {
         double base = (elapsedSeconds * RAINBOW_HUE_SPEED) % 360.0;
         ensureMaterials(rainbowMats, bodyParts.size() + 1);
         PhongMaterial headMat = rainbowMats.get(0);
@@ -1544,13 +1548,13 @@ public class Main extends Application {
         }
     }
     //==================================================================   ensureMaterials   ======================
-    private void ensureMaterials(List<PhongMaterial> mats, int size) {
+    void ensureMaterials(List<PhongMaterial> mats, int size) {
         while (mats.size() < size) {
             mats.add(new PhongMaterial());
         }
     }
     //===============================================================   updateCosmicColors   ===========================
-    private void updateCosmicColors(double elapsedSeconds) {
+    void updateCosmicColors(double elapsedSeconds) {
         double hueShift = (elapsedSeconds * 40) % 360;
         ensureMaterials(cosmicMats, bodyParts.size() + 1);
         PhongMaterial headMat = cosmicMats.get(0);
@@ -1566,7 +1570,7 @@ public class Main extends Application {
         }
     }
     //======================================================   createPlayerBodySegmentLikeTail   =======================
-    private Sphere createPlayerBodySegmentLikeTail() {
+    Sphere createPlayerBodySegmentLikeTail() {
         Sphere lastSegment = bodyParts.get(bodyParts.size() - 1);
         Sphere seg = new Sphere(BODY_RADIUS);
 
@@ -1588,7 +1592,7 @@ public class Main extends Application {
         return seg;
     }
     //===================================================================   makeTexturedSphere   =======================
-    private Sphere makeTexturedSphere(String imagePath) {
+    Sphere makeTexturedSphere(String imagePath) {
         Image img = new Image(getClass().getResource(imagePath).toExternalForm());
         PhongMaterial mat = new PhongMaterial();
         mat.setDiffuseMap(img);
@@ -1598,7 +1602,7 @@ public class Main extends Application {
         return s;
     }
     //==============================================================   respawnRandomFruit   ============================
-    private void respawnRandomFruit(Group gameElements) {
+    void respawnRandomFruit(Group gameElements) {
         gameElements.getChildren().removeAll(fruits);
         double minX = HEAD_RADIUS;
         double maxX = windowWidth - HEAD_RADIUS;
@@ -1627,7 +1631,7 @@ public class Main extends Application {
         if (!gameElements.getChildren().contains(f2)) gameElements.getChildren().add(f2);
     }
     //==============================================================   respawnSingleFruit   ============================
-    private void respawnSingleFruit(Group gameElements, Sphere fruit) {
+    void respawnSingleFruit(Group gameElements, Sphere fruit) {
         double minX = HEAD_RADIUS;
         double maxX = windowWidth - HEAD_RADIUS;
         double minY = topLine.getStartY() + HEAD_RADIUS;
@@ -1657,7 +1661,7 @@ public class Main extends Application {
         }
     }
     //=====================================================  handleVillainCollision  ===================================
-    private void handleVillainCollision(Group gameElements, int villainId1, int villainId2) {
+    void handleVillainCollision(Group gameElements, int villainId1, int villainId2) {
         Sphere head1 = null, head2 = null;
         List<Sphere> body1 = null, body2 = null;
         double x1 = 0, y1 = 0, x2 = 0, y2 = 0;
@@ -1762,7 +1766,7 @@ private void disableVillain(int id, Group gameElements) {
     }
 }
     //==============================================================   setupGoldenFruit   ==============================
-    private void setupGoldenFruit(Group gameElements) {
+    void setupGoldenFruit(Group gameElements) {
         Image goldenImg = new Image(getClass().getResource("/images/golden.png").toExternalForm());
         PhongMaterial goldenMat = new PhongMaterial();
         goldenMat.setDiffuseMap(goldenImg);
@@ -1784,19 +1788,19 @@ private void disableVillain(int id, Group gameElements) {
         goldenFruitRespawnTimer.playFromStart();
     }
     //=====================================================================   pauseGoldenFruitTimers   =================
-    private void pauseGoldenFruitTimers() {
+    void pauseGoldenFruitTimers() {
         if (goldenFruitRespawnTimer != null) goldenFruitRespawnTimer.pause();
         if (goldenFruitDisappearTimer != null) goldenFruitDisappearTimer.pause();
         if (goldenPulse != null) goldenPulse.pause();
     }
     //====================================================================   resumeGoldenFruitTimers   =================
-    private void resumeGoldenFruitTimers() {
+    void resumeGoldenFruitTimers() {
         if (goldenFruitRespawnTimer != null) goldenFruitRespawnTimer.play();
         if (goldenFruitVisible && goldenFruitDisappearTimer != null) goldenFruitDisappearTimer.play();
         if (goldenPulse != null) goldenPulse.play();
     }
     //==================================================================   spawnGoldenFruit   ==========================
-    private void spawnGoldenFruit(Group gameElements) {
+    void spawnGoldenFruit(Group gameElements) {
         if (goldenFruit != null) {
             gameElements.getChildren().remove(goldenFruit);
         }
@@ -1824,7 +1828,7 @@ private void disableVillain(int id, Group gameElements) {
         goldenFruitDisappearTimer.playFromStart();
     }
     //======================================================================   gameOver   ==============================
-    private void gameOver(Stage stage) {
+    void gameOver(Stage stage) {
         if (gameOverSound != null) {
             gameOverSound.stop();
             gameOverSound.play();
@@ -1847,53 +1851,11 @@ private void disableVillain(int id, Group gameElements) {
         if (newHigh) {
             highScore = score;
         }
-        Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle(newHigh ? "New High Score!" : "Game Over");
-            alert.setHeaderText(null);
-            String message = "Game Over!\nFinal Score: " + score;
-            if (newHigh) {
-                message = "🎉 NEW HIGH SCORE: " + score + "\n" + message;
-            }
-            alert.setContentText(message);
-            ButtonType okButton = new ButtonType("OK", ButtonBar.ButtonData.CANCEL_CLOSE);
-            ButtonType restartButton = new ButtonType("Restart", ButtonBar.ButtonData.OK_DONE);
-            alert.getButtonTypes().setAll(okButton, restartButton);
-            DialogPane dialogPane = alert.getDialogPane();
-            dialogPane.setPrefSize(400, 180);
-            dialogPane.setStyle("-fx-background-color: black;");
-            Label contentLabel = (Label) dialogPane.lookup(".content.label");
-            if (contentLabel != null) {
-                contentLabel.setStyle(
-                        "-fx-text-fill: " + (newHigh ? "yellow" : "#FFFFFF") + "; " +
-                                "-fx-font-size: 22px; " +
-                                "-fx-font-weight: bold; " +
-                                "-fx-text-alignment: center;"
-                );
-            }
-            Button okBtn = (Button) dialogPane.lookupButton(okButton);
-            okBtn.setStyle(
-                    "-fx-background-color: gray; " +
-                            "-fx-text-fill: white; " +
-                            "-fx-font-weight: bold; " +
-                            "-fx-font-size: 14px;"
-            );
-            Button restartBtn = (Button) dialogPane.lookupButton(restartButton);
-            restartBtn.setStyle(
-                    "-fx-background-color: green; " +
-                            "-fx-text-fill: white; " +
-                            "-fx-font-weight: bold; " +
-                            "-fx-font-size: 14px;"
-            );
-            alert.showAndWait().ifPresent(response -> {
-                if (response == restartButton) {
-                    restartGame();
-                }
-            });
-        });
+        Engine.onPlayerDeath(this, newHigh);
     }
     //==============================================================   killVillain1   ==================================
-    private void killVillain() {
+    void killVillain() {
+        Engine.onVillainDown(this);
         if (!villainAlive) return;
         villainAlive = false;
         Group rootGroup = (Group) head.getParent().getParent();
@@ -1910,8 +1872,9 @@ private void disableVillain(int id, Group gameElements) {
         villainRespawnTimer.play();
     }
     //==============================================================   killVillain2   ==================================
-    private void killVillain2() {
+    void killVillain2() {
         if (!villain2Alive) return;
+        Engine.onVillainDown(this);
         villain2Alive = false;
         Group rootGroup = (Group) head.getParent().getParent();
         if (villain2RespawnTimer != null) {
@@ -1927,8 +1890,9 @@ private void disableVillain(int id, Group gameElements) {
         villain2RespawnTimer.play();
     }
     //==============================================================   killVillain3   ==================================
-    private void killVillain3() {
+    void killVillain3() {
         if (!villain3Alive) return;
+        Engine.onVillainDown(this);
         villain3Alive = false;
         Group rootGroup = (Group) head.getParent().getParent();
         if (villain3RespawnTimer != null) {
@@ -1944,7 +1908,7 @@ private void disableVillain(int id, Group gameElements) {
         villain3RespawnTimer.play();
     }
     //==============================================================   respawnVillain1   ===============================
-    private void respawnVillain(Group rootGroup) {
+    void respawnVillain(Group rootGroup) {
         if (villainHead != null) rootGroup.getChildren().remove(villainHead);
         if (!villainBodyParts.isEmpty()) {
             rootGroup.getChildren().removeAll(villainBodyParts);
@@ -1971,7 +1935,7 @@ private void disableVillain(int id, Group gameElements) {
         rootGroup.getChildren().addAll(villainBodyParts);
     }
     //==============================================================   respawnVillain2   ===============================
-    private void respawnVillain2(Group rootGroup) {
+    void respawnVillain2(Group rootGroup) {
         if (villain2Head != null) rootGroup.getChildren().remove(villain2Head);
         if (!villain2BodyParts.isEmpty()) {
             rootGroup.getChildren().removeAll(villain2BodyParts);
@@ -1998,7 +1962,7 @@ private void disableVillain(int id, Group gameElements) {
         rootGroup.getChildren().addAll(villain2BodyParts);
     }
     //==============================================================   respawnVillain3   ===============================
-    private void respawnVillain3(Group rootGroup) {
+    void respawnVillain3(Group rootGroup) {
         if (villain3Head != null) rootGroup.getChildren().remove(villain3Head);
         if (!villain3BodyParts.isEmpty()) {
             rootGroup.getChildren().removeAll(villain3BodyParts);
@@ -2025,7 +1989,7 @@ private void disableVillain(int id, Group gameElements) {
         rootGroup.getChildren().addAll(villain3BodyParts);
     }
     //================================================================   resetSnake   ==================================
-    private void resetSnake() {
+    void resetSnake() {
         headX = windowWidth / 2;
         headY = windowHeight / 2;
         direction = 0;
@@ -2147,9 +2111,10 @@ private void disableVillain(int id, Group gameElements) {
         scoreText.setText("Score: " + score);
         lastSpecialItem = null;
         applySkinToPlayerSnake();
+        Engine.applyModeFromReset();
     }
     //===========================================================================   restartGame   ======================
-    private void restartGame() {
+    void restartGame() {
         clickSound.play();
         resetSnake();
         running = true;
@@ -2160,7 +2125,7 @@ private void disableVillain(int id, Group gameElements) {
         }
     }
     //====================================================================   dist2   ===================================
-    private double dist2(double x1, double y1, double x2, double y2) {
+    double dist2(double x1, double y1, double x2, double y2) {
         double dx = x1 - x2, dy = y1 - y2;
         return dx*dx + dy*dy;
     }
@@ -2170,7 +2135,7 @@ private void disableVillain(int id, Group gameElements) {
      * the entry located {@code stepsBack} positions before the tail (0 = newest).
      * Replaces the previous O(history) stream().skip() lookup.
      */
-    private double[] posAtFromTail(Deque<double[]> history, int stepsBack, double[] fallback) {
+    double[] posAtFromTail(Deque<double[]> history, int stepsBack, double[] fallback) {
         if (stepsBack < 0) stepsBack = 0;
         Iterator<double[]> it = history.descendingIterator();
         double[] result = null;
@@ -2182,7 +2147,7 @@ private void disableVillain(int id, Group gameElements) {
         return result != null ? result : fallback;
     }
     //===================================================   wrapX   ====================================
-    private double wrapX(double x) {
+    double wrapX(double x) {
         double width = windowWidth - HEAD_RADIUS - LINE_MARGIN;
         double left = HEAD_RADIUS;
         double shifted = (x - left) % (width - left);
@@ -2190,7 +2155,7 @@ private void disableVillain(int id, Group gameElements) {
         return left + shifted;
     }
     //==============================================================   wrapY   ===================================
-    private double wrapY(double y) {
+    double wrapY(double y) {
         double top = topLine.getStartY() + HEAD_RADIUS;
         double bottom = bottomLine.getStartY() - HEAD_RADIUS - LINE_MARGIN;
         if (y > bottom) return top;
@@ -2198,7 +2163,7 @@ private void disableVillain(int id, Group gameElements) {
         return y;
     }
     //====================================================================   pathSafeFromPlayer1   =====================
-    private boolean pathSafeFromPlayer(int dir, int steps) {
+    boolean pathSafeFromPlayer(int dir, int steps) {
         double x = villainX, y = villainY;
         double dangerR = HEAD_RADIUS + BODY_RADIUS * 0.95;
         double dangerR2 = dangerR * dangerR;
@@ -2238,7 +2203,7 @@ private void disableVillain(int id, Group gameElements) {
         return true;
     }
     //====================================================================   pathSafeFromPlayer2   =====================
-    private boolean pathSafeFromPlayer2(int dir2, int steps2) {
+    boolean pathSafeFromPlayer2(int dir2, int steps2) {
         double x1 = villain2X, y1 = villain2Y;
         double dangerR1 = HEAD_RADIUS + BODY_RADIUS * 0.95;
         double dangerR21 = dangerR1 * dangerR1;
@@ -2278,7 +2243,7 @@ private void disableVillain(int id, Group gameElements) {
         return true;
     }
     //====================================================================   pathSafeFromPlayer3   =====================
-    private boolean pathSafeFromPlayer3(int dir3, int steps3) {
+    boolean pathSafeFromPlayer3(int dir3, int steps3) {
         double x2 = villain3X, y2 = villain3Y;
         double dangerR2 = HEAD_RADIUS + BODY_RADIUS * 0.95;
         double dangerR22 = dangerR2 * dangerR2;
@@ -2318,7 +2283,7 @@ private void disableVillain(int id, Group gameElements) {
         return true;
     }
     //===================================================================   updateVillainAI 1  =========================
-    private void updateVillainAI(Group gameElements) {
+    void updateVillainAI(Group gameElements) {
         if (!villainAlive) return;
         Sphere targetFruit = null;
         if (goldenFruitVisible) {
@@ -2446,7 +2411,7 @@ private void disableVillain(int id, Group gameElements) {
         }
     }
     //===================================================================  updateVillainAI 2  ==========================
-    private void updateVillain2AI(Group gameElements) {
+    void updateVillain2AI(Group gameElements) {
         if (!villain2Alive) return;
         Sphere targetFruit = null;
         if (goldenFruitVisible) {
@@ -2575,7 +2540,7 @@ private void disableVillain(int id, Group gameElements) {
         }
     }
     //==================================================  updateVillainAI 3 ============================================
-    private void updateVillain3AI(Group gameElements) {
+    void updateVillain3AI(Group gameElements) {
         if (!villain3Alive) return;
         Sphere targetFruit = null;
         if (goldenFruitVisible) {
