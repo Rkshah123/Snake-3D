@@ -49,6 +49,15 @@ jobs:
       - name: Build APK (GluonFX native image)
         run: mvn -B -Pandroid gluonfx:build gluonfx:package
 
+      - name: Dump gluonfx process logs (on failure)
+        if: failure()
+        run: |
+          for f in $(find target/gluonfx -type f -name '*.log' | sort -u); do
+            echo "===================== $f ====================="
+            cat "$f"
+            echo
+          done
+
       - name: Stage APK
         run: |
           mkdir -p release
