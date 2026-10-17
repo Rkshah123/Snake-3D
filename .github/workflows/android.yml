@@ -15,25 +15,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install GraalVM Community JDK 17.0.7 (native-image included)
+      - name: Install Gluon GraalVM 22.1.0.1 (required by gluonfx)
         run: |
           cd "$RUNNER_TEMP"
-          wget -q https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.7/graalvm-community-jdk-17.0.7_linux-x64_bin.tar.gz -O graalvm.tar.gz
-          tar -xzf graalvm.tar.gz
-          rm graalvm.tar.gz
-          GRAAL_DIR=$(ls -d /opt/graalvm-community-openjdk-17.0.7* 2>/dev/null || true)
-          if [ -z "$GRAAL_DIR" ]; then
-            sudo mv "$RUNNER_TEMP"/graalvm-community-openjdk-17.0.7* /opt/
-            GRAAL_DIR=$(ls -d /opt/graalvm-community-openjdk-17.0.7* | head -n1)
-          fi
-          mkdir -p "$GRAAL_DIR/bin"
+          wget -q https://github.com/gluonhq/graal/releases/download/gluon-22.1.0.1-Final/graalvm-svm-java17-linux-gluon-22.1.0.1-Final.tar.gz -O gluon-graalvm.tar.gz
+          tar -xzf gluon-graalvm.tar.gz
+          rm gluon-graalvm.tar.gz
+          NI=$(find "$RUNNER_TEMP" -type f -name native-image | head -n1)
+          if [ -z "$NI" ]; then echo "native-image not found in tarball"; exit 1; fi
+          GRAAL_DIR=$(cd "$(dirname "$NI")/.." && pwd)
+          echo "Graal dir: $GRAAL_DIR"
           echo "GRAALVM_HOME=$GRAAL_DIR" >> "$GITHUB_ENV"
           echo "JAVA_HOME=$GRAAL_DIR" >> "$GITHUB_ENV"
           echo "$GRAAL_DIR/bin" >> "$GITHUB_PATH"
       - name: Verify GraalVM
         run: |
           java -version 2>&1
-          which native-image
           native-image --version
 
       - name: Prepare Android SDK (platform, build-tools, NDK 25)
