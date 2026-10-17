@@ -44,7 +44,7 @@ jobs:
           path: release/*.apk
           if-no-files-found: error
 
-      - name: Publish APK to GitHub Release (tag: apk)
+      - name: "Publish APK to GitHub Release (tag apk)"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
