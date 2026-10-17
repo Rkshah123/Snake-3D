@@ -15,11 +15,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up GraalVM Community JDK 17 (native-image included)
-        uses: actions/setup-java@v4
-        with:
-          distribution: graalvm-community
-          java-version: '17'
+      - name: Install GraalVM Community JDK 17.0.7 (native-image included)
+        run: |
+          cd "$RUNNER_TEMP"
+          wget -q https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.7/graalvm-community-jdk-17.0.7_linux-x64_bin.tar.gz -O graalvm.tar.gz
+          tar -xzf graalvm.tar.gz
+          rm graalvm.tar.gz
+          GRAAL_DIR=$(ls -d /opt/graalvm-community-openjdk-17.0.7* 2>/dev/null || true)
+          if [ -z "$GRAAL_DIR" ]; then
+            sudo mv "$RUNNER_TEMP"/graalvm-community-openjdk-17.0.7* /opt/
+            GRAAL_DIR=$(ls -d /opt/graalvm-community-openjdk-17.0.7* | head -n1)
+          fi
+          mkdir -p "$GRAAL_DIR/bin"
+          echo "GRAALVM_HOME=$GRAAL_DIR" >> "$GITHUB_ENV"
+          echo "JAVA_HOME=$GRAAL_DIR" >> "$GITHUB_ENV"
+          echo "$GRAAL_DIR/bin" >> "$GITHUB_PATH"
+      - name: Verify GraalVM
+        run: |
+          java -version 2>&1
+          which native-image
+          native-image --version
 
       - name: Prepare Android SDK (platform, build-tools, NDK 25)
         run: |
