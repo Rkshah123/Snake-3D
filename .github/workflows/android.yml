@@ -15,12 +15,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up GraalVM CE 17 (native-image included)
-        uses: graalvm/setup-graalvm@v1
+      - name: Set up GraalVM Community JDK 17 (native-image included)
+        uses: actions/setup-java@v4
         with:
+          distribution: graalvm-community
           java-version: '17'
-          distribution: 'graalvm-ce'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Prepare Android SDK (platform, build-tools, NDK 25)
         run: |
