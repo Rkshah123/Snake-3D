@@ -46,8 +46,14 @@ jobs:
           "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" \
             "platform-tools" "platforms;android-33" "build-tools;33.0.2" "ndk;25.2.9519653"
 
-      - name: Build APK (GluonFX native image)
-        run: mvn -B -Pandroid gluonfx:build gluonfx:package
+      - name: Build native image (needs runner SDK for NDK)
+        run: mvn -B -Pandroid gluonfx:build
+
+      - name: Package APK (must use Gluon's downloaded SDK only)
+        run: mvn -B -Pandroid gluonfx:package
+        env:
+          ANDROID_SDK_ROOT: ''
+          ANDROID_HOME: ''
 
       - name: Dump gluonfx process logs (on failure)
         if: failure()
